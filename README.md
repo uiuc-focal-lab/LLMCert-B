@@ -1,14 +1,25 @@
-# Quantitative Certification of Bias in Large Language Models
+# Certifying Counterfactual Bias in Large Language Models
 
 ## Introduction
-QCB is a framework for quantitatively certifying the bias in large language models (LLMs).
+LLMCert-B is a novel framework for certifying counterfactual bias in large language models (LLMs). Formal certification differs from benchmarking due to the following reasons - 
+1. **Limited test cases**. Benchmarking consists of evaluating several but limited number of test cases. Due to its enumerative nature, benchmarking can not scale to prohibitively large numbers of prompts that can elicit bias from LLMs. Adversarial attacks identify only few worst-case examples, which do not inform about the overall biases from large input sets. Quantitative certification, on the other hand, gives information about LLM behaviors on specifications over prohibitively large number of inputs.
+2. **Test set leakage**. LLMs may have been trained on popular benchmarking datasets, thus resulting in incorrect evaluation. Certification is over *distributions of input prompts*, having large sample spaces, which are prohibitive to train on.
+3. **Formal guarantees**. Benchmarking involves empirical estimation without any formal guarantees of generalization over any input sets. Similarly, adversarial attacks give limited insights as they can show existence of problematic behaviors on individual inputs but do not quantify the risk of biased LLM responses. Certification, on the other hand, gives *formal probabilistic guarantees* on LLM behaviors.
+
+Next, we summarize the contributions of our framework LLMCert-B.
+1. We design *novel specifications* that quantify the desirable relational property of low counterfactual bias in LLM responses over counterfactual prompts in a specified distribution. We illustrate such specifications with distributions of counterfactual prompt sets constructed with potentially adversarial prefixes. The prefixes are drawn from 3 distributions — (1) random, (2) mixture of jailbreaks, and (3) jailbreak perturbations in the embedding space.
+2. We develop the *first probabilistic black-box certifier* LLMCert-B, applicable to both open and closed-source models, for quantifying counterfactual bias in LLM responses. LLMCertB leverages confidence intervals to generate high-confidence bounds on the probability of obtaining unbiased responses from the target LLM, given any random set of counterfactual prompts from the distribution given in the specification.
+3. We find that the safety alignment of SOTA LLMs is easily circumvented with several prefixes in the distributions given in our specifications, especially those involving mixture of jailbreaks and jailbreak perturbations in the embedding space (§ 5). These distributions are inexpensive to sample from, but can effectively bring out biased behaviors from SOTA models. This shows the existence of simple, bias-provoking distributions for which no defenses exist currently. We provide quantitative measures for the fairness (lack of bias) of SOTA LLMs, which hold with high confidence. We find that there are no consistent trends in the fairness of models with the scaling of their sizes, hence suggesting that the quality of alignment techniques could be a more important factor than size for fairness.
+
+The below figure summarizes the execution of LLMCert-B on an illustrative example.
+![Overview of LLMCert-B](overview.png "Overview of LLMCert-B")
 
 ## Setup
-To setup QCB, please set up a conda environment with the following command:
+To setup LLMCert-B, please set up a conda environment with the following command:
 ```conda env create -f environment.yml```
 
 Then, activate the environment with the following command:
-```conda activate qcb```
+```conda activate LLMCert-B```
 
 Add the API keys for closed-source models in the file ```api_keys.py```.
 Make a folder to store the certification results as ```mkdir results/```.
