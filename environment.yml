@@ -1,4 +1,4 @@
-name: qcb
+name: LLMCert-B
 channels:
   - pytorch
   - nvidia
